@@ -1,0 +1,38 @@
+{
+  "name": "framecord",
+  "version": "1.0.0",
+  "description": "A Discord bot framework made by Sana Rinomi.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanaRinomi/FrameCord.git"
+  },
+  "keywords": [
+    "Framework",
+    "Discord",
+    "EZ"
+  ],
+  "author": "Amelia Rose Aldridge",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SanaRinomi/FrameCord/issues"
+  },
+  "homepage": "https://github.com/SanaRinomi/FrameCord#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "mocha": "^7.1.1",
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "discord.js": "^12.1.1",
+    "erlpack": "github:discordapp/erlpack",
+    "fs-extra": "^9.0.0",
+    "moment": "^2.24.0",
+    "node-opus": "^0.3.3",
+    "uws": "^100.0.1"
+  }
+}

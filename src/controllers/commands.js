@@ -1,0 +1,5 @@
+class CommandHandler {
+    constructor(client) {
+        
+    }
+}

@@ -1,12 +1,14 @@
 const {Main} = require("../controllers/logger");
 
 class Event {
-    get Client() { return this._client; }
+    get ID() { return this._id; }
+    get DiscordCli() { return this._discordCli; }
     get Functions() { return this._funcs; }
     
-    constructor(client, event) {
-        Main.debug(["Event created:", event]);
-        this._client = client;
+    constructor(discordCli, id) {
+        Main.debug(["Event created:", id]);
+        this._id = id;
+        this._discordCli = discordCli;
         this._funcs = [];
     }
 
@@ -22,58 +24,58 @@ class Event {
 }
 
 class ReadyEvent extends Event {
-    constructor(client) {
-        super(client, "ready");
-        client.on("ready", () => {this.execute();});
+    constructor(discordCli) {
+        super(discordCli, "discord.ready");
+        discordCli.on("ready", () => {this.execute();});
     }
 }
 
 class ErrorEvent extends Event {
-    constructor(client) {
-        super(client, "error");
-        client.on("error", err => {this.execute(err);});
+    constructor(discordCli) {
+        super(discordCli, "error");
+        discordCli.on("error", err => {this.execute(err);});
     }
 }
 
 class MessageEvent extends Event {
-    constructor(client) {
-        super(client, "message");
-        client.on("message", msg => {this.execute(msg);});
+    constructor(discordCli) {
+        super(discordCli, "discord.message");
+        discordCli.on("message", msg => {this.execute(msg);});
     }
 }
 
 class MessageUpdateEvent extends Event {
-    constructor(client) {
-        super(client, "messageUpdate");
-        client.on("messageUpdate", (oldMsg, newMsg) => {this.execute(oldMsg, newMsg);});
+    constructor(discordCli) {
+        super(discordCli, "discord.messageUpdate");
+        discordCli.on("messageUpdate", (oldMsg, newMsg) => {this.execute(oldMsg, newMsg);});
     }
 }
 
 class MessageDeleteEvent extends Event {
-    constructor(client) {
-        super(client, "messageDelete");
-        client.on("messageDelete", msg => {this.execute(msg);});
+    constructor(discordCli) {
+        super(discordCli, "discord.messageDelete");
+        discordCli.on("messageDelete", msg => {this.execute(msg);});
     }
 }
 
 class MultiMessageDeleteEvent extends Event {
-    constructor(client) {
-        super(client, "messageDeleteBulk");
-        client.on("messageDeleteBulk", msgs => {this.execute(msgs);});
+    constructor(discordCli) {
+        super(discordCli, "discord.messageDeleteBulk");
+        discordCli.on("messageDeleteBulk", msgs => {this.execute(msgs);});
     }
 }
 
 class AddReactionEvent extends Event {
-    constructor(client) {
-        super(client, "messageReactionAdd");
-        client.on("messageReactionAdd", (msgReaction, user) => {this.execute(msgReaction, user);});
+    constructor(discordCli) {
+        super(discordCli, "discord.messageReactionAdd");
+        discordCli.on("messageReactionAdd", (msgReaction, user) => {this.execute(msgReaction, user);});
     }
 }
 
 class RemovedReactionEvent extends Event {
-    constructor(client) {
-        super(client, "messageReactionRemove");
-        client.on("messageReactionRemove", (msgReaction, user) => {this.execute(msgReaction, user);});
+    constructor(discordCli) {
+        super(discordCli, "discord.messageReactionRemove");
+        discordCli.on("messageReactionRemove", (msgReaction, user) => {this.execute(msgReaction, user);});
     }
 }
 
@@ -89,5 +91,6 @@ module.exports = {
     Reactions: {
         Add: AddReactionEvent,
         Removed: RemovedReactionEvent
-    }
+    },
+    Event
 };

@@ -1,22 +1,12 @@
 const {Main} = require("../controllers/logger");
 const DPermissions = require("./discordPerms");
 
-class CommandRequest {
-    constructor(client, string) {
-
-    }
-}
-
 class Command {
-    get ID() { return this._id; }
     get Name() { return this._name; }
     get Description() { return this._description; }
     get IsNSFW() { return this._nsfw; }
 
-    get HasChildren() { return this._children.length !== 0; }
     get HasCall() { return this._onCall !== null; }
-    get Children() { return this._children; }
-    get Parent() { return this._parent; }
     get Permissions() { return this._permissions; }
     get OnCall() { return this._onCall; }
     
@@ -37,42 +27,21 @@ class Command {
         this._description = data.description;
         this._nsfw = data.nsfw;
 
-        this._parent;
-        this._children = [];
         this._onCall = func;
         this._permissions = perms ? perms : new DPermissions();
         Main.debug(["[Command Class] Created new Command:", this._name]);
     }
 
-    delete() {
-        if(this.HasChildren)
-            for (let i = 0; i < this._children.length; i++) {
-                child.delete();
-            }
-        
+    delete() {   
         this._name = null;
         this._description = null;
         this._id = null;
         this._nsfw = null;
-        this._parent = null;
-        this._children = null;
         this._permissions = null;
         this._onCall = null;
     }
 
-    addChild(child) {
-        this._children.push(child);
-    }
-
-    getChild(id) {
-		for (let i = 0; i < this._children.length; i++) {
-			const child = this._children[i];
-			if (id === child.ID) return child;
-		}
-		return null;
-    }
-
-    call(client, command, msg, args) {
+    callFunc(client, command, msg, args) {
         if(msg.guild && this.IsNSFW) {
             if(msg.channel.type === "text" && !msg.channel.nsfw) {
                 msg.reply("This command is only available in NSFW channels!");

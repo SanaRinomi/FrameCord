@@ -5,10 +5,9 @@ class Event {
     get DiscordCli() { return this._discordCli; }
     get Functions() { return this._funcs; }
     
-    constructor(discordCli, id) {
+    constructor(id) {
         Main.debug(["Event created:", id]);
         this._id = id;
-        this._discordCli = discordCli;
         this._funcs = [];
     }
 
@@ -21,62 +20,80 @@ class Event {
             this._funcs[i](...args);
         }
     }
+
+    init() {}
 }
 
 class ReadyEvent extends Event {
     constructor(discordCli) {
-        super(discordCli, "discord.ready");
-        discordCli.on("ready", () => {this.execute();});
+        super("discord.ready");
+        this.init(discordCli);
     }
+
+    init(discordCli) {discordCli.on("ready", () => {this.execute();});}
 }
 
 class ErrorEvent extends Event {
     constructor(discordCli) {
-        super(discordCli, "error");
-        discordCli.on("error", err => {this.execute(err);});
+        super("error");
+        this.init(discordCli);
     }
+
+    init(discordCli) {discordCli.on("error", err => {this.execute(err);});}
 }
 
 class MessageEvent extends Event {
     constructor(discordCli) {
-        super(discordCli, "discord.message");
-        discordCli.on("message", msg => {this.execute(msg);});
+        super("discord.message");
+        this.init(discordCli);
     }
+
+    init(discordCli) {discordCli.on("message", msg => {this.execute(msg);});}
 }
 
 class MessageUpdateEvent extends Event {
     constructor(discordCli) {
-        super(discordCli, "discord.messageUpdate");
-        discordCli.on("messageUpdate", (oldMsg, newMsg) => {this.execute(oldMsg, newMsg);});
+        super("discord.messageUpdate");
+        this.init(discordCli);
     }
+
+    init(discordCli) {discordCli.on("messageUpdate", (oldMsg, newMsg) => {this.execute(oldMsg, newMsg);});}
 }
 
 class MessageDeleteEvent extends Event {
     constructor(discordCli) {
-        super(discordCli, "discord.messageDelete");
-        discordCli.on("messageDelete", msg => {this.execute(msg);});
+        super("discord.messageDelete");
+        this.init(discordCli);
     }
+
+    init(discordCli) {discordCli.on("messageDelete", msg => {this.execute(msg);});}
 }
 
 class MultiMessageDeleteEvent extends Event {
     constructor(discordCli) {
-        super(discordCli, "discord.messageDeleteBulk");
-        discordCli.on("messageDeleteBulk", msgs => {this.execute(msgs);});
+        super("discord.messageDeleteBulk");
+        this.init(discordCli);
     }
+
+    init(discordCli) {discordCli.on("messageDeleteBulk", msgs => {this.execute(msgs);});}
 }
 
 class AddReactionEvent extends Event {
     constructor(discordCli) {
-        super(discordCli, "discord.messageReactionAdd");
-        discordCli.on("messageReactionAdd", (msgReaction, user) => {this.execute(msgReaction, user);});
+        super("discord.messageReactionAdd");
+        this.init(discordCli);
     }
+
+    init(discordCli) {discordCli.on("messageReactionAdd", (msgReaction, user) => {this.execute(msgReaction, user);});}
 }
 
 class RemovedReactionEvent extends Event {
     constructor(discordCli) {
-        super(discordCli, "discord.messageReactionRemove");
-        discordCli.on("messageReactionRemove", (msgReaction, user) => {this.execute(msgReaction, user);});
+        super("discord.messageReactionRemove");
+        this.init(discordCli);
     }
+
+    init(discordCli) {discordCli.on("messageReactionRemove", (msgReaction, user) => {this.execute(msgReaction, user);});}
 }
 
 module.exports = {

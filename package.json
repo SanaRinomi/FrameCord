@@ -25,11 +25,11 @@
     "chai": "^4.2.0",
     "eslint": "^6.8.0",
     "mocha": "^7.1.1",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.3"
   },
   "dependencies": {
     "bufferutil": "^4.0.1",
-    "discord.js": "^12.1.1",
+    "discord.js": "^12.2.0",
     "erlpack": "github:discordapp/erlpack",
     "fs-extra": "^9.0.0",
     "moment": "^2.24.0",

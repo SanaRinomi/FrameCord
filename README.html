@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>README.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="framecord">FrameCord</h1>
+<p>A Discord bot frameword made by Sana Rinomi.</p>
+<h2 id="index">Index</h2>
+<ul>
+<li><a href="#setting-up-a-bot">Setting up a Bot</a>
+<ul>
+<li><a href="#adding-commands">Adding Commands</a>
+<ul>
+<li><a href="#adding-commands-method-1">Adding Commands: Method 1</a></li>
+<li><a href="#adding-commands-method-2">Adding Commands: Method 2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#nodes">Nodes</a>
+<ul>
+<li><a href="#node">Node</a></li>
+<li><a href="#data-node">Data Node</a></li>
+<li><a href="#root-node">Root Node</a></li>
+<li><a href="#command-node">Command Node</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="setting-up-a-bot">Setting up a Bot</h2>
+<p>To get your bot up up and running is rather simple!
+We create a <code>Client</code> and then we use the <code>login()</code> function to start the bot!</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> {Client} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"framecord"</span>);
+
+<span class="hljs-keyword">let</span> client = <span class="hljs-keyword">new</span> Client(<span class="hljs-string">"Discord bot token"</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">"Example Bot"</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">"This is an example bot"</span>,
+    <span class="hljs-attr">prefix</span>: <span class="hljs-string">"e"</span>
+});
+
+client.login();
+</div></code></pre>
+<h3 id="adding-commands">Adding Commands</h3>
+<p>To add commands to our bot, we need to first create a <a href="#node"><code>Node</code></a>! This node can be be a simple <a href="#node"><code>Node</code></a> or it could also be a <a href="#data-node"><code>DataNode</code></a>.
+This node will be the base we will call commands from, and there can be multiple!</p>
+<p>In this example we will use a <code>DataNode</code> with the ID of <code>!</code> and add it to our client.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> {Client, Nodes} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"framecord"</span>);
+
+<span class="hljs-keyword">let</span> client = <span class="hljs-keyword">new</span> Client(<span class="hljs-string">"Discord bot token"</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">"Example Bot"</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">"This is an example bot"</span>,
+    <span class="hljs-attr">prefix</span>: <span class="hljs-string">"e"</span>
+});
+
+<span class="hljs-keyword">let</span> Base = <span class="hljs-keyword">new</span> Nodes.DataNode(<span class="hljs-string">"!"</span>);
+
+client.registerNode(Base);
+
+client.login();
+</div></code></pre>
+<p>Now we can add our command, which to do so, we will create a new <a href="#command-node"><code>CommandNode</code></a>.
+And as an example, we will make a command that closes our program.</p>
+<p>Here's how we create a command:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> {Client, Nodes} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"framecord"</span>);
+
+<span class="hljs-keyword">let</span> client = <span class="hljs-keyword">new</span> Client(<span class="hljs-string">"Discord bot token"</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">"Example Bot"</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">"This is an example bot"</span>,
+    <span class="hljs-attr">prefix</span>: <span class="hljs-string">"e"</span>
+});
+
+<span class="hljs-keyword">let</span> Base = <span class="hljs-keyword">new</span> Nodes.DataNode(<span class="hljs-string">"!"</span>);
+<span class="hljs-keyword">let</span> Exit = <span class="hljs-keyword">new</span> Nodes.CommandNode(<span class="hljs-string">"exit"</span>, (cli, command, msg) =&gt; {
+    msg.reply(<span class="hljs-string">"See you later!"</span>).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        cli.exit();
+    });
+});
+
+client.registerNode(Base);
+
+client.login();
+</div></code></pre>
+<p>There are 2 ways we can add the command node to our client:</p>
+<ul>
+<li>Using <code>addChild(Node)</code></li>
+<li>Using the client method <code>registerNode(Node, String)</code> with a path</li>
+</ul>
+<p>Each one has their own benefits, so choose according to what you want to do.
+You can also use both methods at the same time, so a hybrid approach is possible.</p>
+<h4 id="adding-commands-method-1">Adding Commands: Method 1</h4>
+<p>This example shows the use of <code>addChild(Node)</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> {Client, Nodes} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"framecord"</span>);
+
+<span class="hljs-keyword">let</span> client = <span class="hljs-keyword">new</span> Client(<span class="hljs-string">"Discord bot token"</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">"Example Bot"</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">"This is an example bot"</span>,
+    <span class="hljs-attr">prefix</span>: <span class="hljs-string">"e"</span>
+});
+
+<span class="hljs-keyword">let</span> Base = <span class="hljs-keyword">new</span> Nodes.DataNode(<span class="hljs-string">"!"</span>);
+<span class="hljs-keyword">let</span> Exit = <span class="hljs-keyword">new</span> Nodes.CommandNode(<span class="hljs-string">"exit"</span>, (cli, command, msg) =&gt; {
+    msg.reply(<span class="hljs-string">"See you later!"</span>).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        cli.exit();
+    });
+});
+
+Base.addChild(Exit);
+client.registerNode(Base);
+
+client.login();
+</div></code></pre>
+<p>This method is easier to implement, since you directly add your node to the parent using <a href="#node"><code>Node</code></a>'s <code>addChild(Node)</code> method without having to worry if the parent exists.</p>
+<h4 id="adding-commands-method-2">Adding Commands: Method 2</h4>
+<p>This example shows the use of your client's <code>registerNode(Node, String)</code> method using a path:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> {Client, Nodes} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"framecord"</span>);
+
+<span class="hljs-keyword">let</span> client = <span class="hljs-keyword">new</span> Client(<span class="hljs-string">"Discord bot token"</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">"Example Bot"</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">"This is an example bot"</span>,
+    <span class="hljs-attr">prefix</span>: <span class="hljs-string">"e"</span>
+});
+
+<span class="hljs-keyword">let</span> Base = <span class="hljs-keyword">new</span> Nodes.DataNode(<span class="hljs-string">"!"</span>);
+<span class="hljs-keyword">let</span> Exit = <span class="hljs-keyword">new</span> Nodes.CommandNode(<span class="hljs-string">"exit"</span>, (cli, command, msg) =&gt; {
+    msg.reply(<span class="hljs-string">"See you later!"</span>).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        cli.exit();
+    });
+});
+
+client.registerNode(Base);
+client.registerNode(Exit, <span class="hljs-string">"!"</span>);
+
+client.login();
+</div></code></pre>
+<p>With this method, you have to make sure your parent node is already registered, the path is exactly like how you'd call a command within Discord just without the prefix.
+Like in this example, we want to register a node to our base <code>!</code>, in Discord our path would be <code>e!</code> while the path within the client itself would just be <code>!</code>.
+A few more examples:</p>
+<ul>
+<li><code>e!foo</code> =&gt; <code>!foo</code></li>
+<li><code>e!foo bar</code> =&gt; <code>!foo bar</code></li>
+</ul>
+<p>Be aware that <code>registerNode(Node, String)</code> uses the same method as <code>executeNode(String)</code> which is used to call commands.
+Which means that registering something to <code>!foo bar doesntexist</code> would register to node <code>bar</code>, and <code>doesntexist</code> would be returned as a command argument.</p>
+<p>This method works great for modular bots, with code that's loaded in dynamically.</p>
+<h2 id="nodes">Nodes</h2>
+<p>You can find all the nodes under <code>Nodes</code> in FrameCord:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> {Nodes} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"framecord"</span>);
+</div></code></pre>
+<p>These are the nodes available by default with FrameCord:</p>
+<h3 id="node">Node</h3>
+<p>Type: <code>blank</code>. This node is our base node, and every other node is going to be based off of it.</p>
+<h4 id="constructor">Constructor</h4>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>ID of the node</td>
+<td>String</td>
+<td><code>null</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="variables">Variables</h4>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Type</th>
+<th>Read-Only</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td>String</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>ID</td>
+<td>String</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Parent</td>
+<td>Node</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Children</td>
+<td>Array</td>
+<td>No</td>
+</tr>
+<tr>
+<td>HasChildren</td>
+<td>Boolean</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>FirstChild</td>
+<td>Node</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LastChild</td>
+<td>Node</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="methods">Methods</h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Return Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>addChild(Node)</td>
+<td>Adds a child node to the current node. Errors if child with same ID is present!</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>getChild()</td>
+<td>Gets a child from the current node. Returns <code>null</code> if that child doesn't exist.</td>
+<td>Node or <code>null</code></td>
+</tr>
+<tr>
+<td>removeChild(String)</td>
+<td>Removes any child with the ID specified.*</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>removeChildren()</td>
+<td>Removes all children from the current node.</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>delete()</td>
+<td>Calls <code>removeChildren()</code> and sets all data stored within to <code>null</code>.</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>equals(Node)</td>
+<td>Returns <code>true</code> if the IDs and Types match between the current node and the one passed, <code>false</code> if not.</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td>toBlankNode()</td>
+<td>Returns a new <code>Node</code> instance with the same <code>ID</code> and <code>Children</code> as the current node.</td>
+<td>Node of type <code>blank</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Removing children will call the <code>delete()</code> function of the children.</li>
+</ul>
+<h3 id="data-node">Data Node</h3>
+<p><code>DataNode</code> extends <a href="#node"><code>Node</code></a>.</p>
+<p>Type: <code>data</code>. This node adds basic data such as <code>Name</code>. <code>Description</code>, <code>Tags</code> and <code>IsNSFW</code> to <code>Node</code>.</p>
+<h4 id="constructor">Constructor</h4>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>ID of the node</td>
+<td>String</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>data</td>
+<td>Object with the values <code>name</code>, <code>desc</code>, <code>tags[]</code> and <code>nsfw</code></td>
+<td>JSON or JS Object</td>
+<td><code>{name: &quot;&quot;, desc: &quot;&quot;, tags: [], nsfw: false}</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="variables">Variables</h4>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Type</th>
+<th>Read-Only</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name</td>
+<td>String</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>String</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Tags</td>
+<td>Array</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>IsNSFW</td>
+<td>Boolean</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="methods">Methods</h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Return Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>toDataNode()</td>
+<td>Same function as <code>toBlankNode()</code>, but includes the values <code>Name</code>, <code>Description</code>, <code>Tags</code> and <code>IsNSFW</code></td>
+<td>Node of type <code>data</code></td>
+</tr>
+<tr>
+<td><code>static</code> toDataNode(Node, {name: &quot;&quot;, desc: &quot;&quot;, tags: [], nsfw: false})</td>
+<td>Same function as <code>toBlankNode()</code>, but includes the values <code>Name</code>, <code>Description</code>, <code>Tags</code> and <code>IsNSFW</code></td>
+<td>Node of type <code>data</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="root-node">Root Node</h3>
+<p><code>RootNode</code> extends <a href="#node"><code>Node</code></a>.</p>
+<p>Type: <code>root</code>. This node includes a bunch of methods related to finding and retrieving nodes, and creating command variables.
+Used mainly by a <code>Client</code> instance.</p>
+<h4 id="constructor">Constructor</h4>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>ID of the node</td>
+<td>String</td>
+<td><code>null</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="methods">Methods</h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Return Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getRegex(Boolean = <code>true</code>)</td>
+<td>Returns a regular expression, mainly to separate out the prefix, from the base node and from the command node</td>
+<td>RegExp</td>
+</tr>
+<tr>
+<td>getCommandObj(String)</td>
+<td>Creates a command object from a string.</td>
+<td>Command Obj: <code>{prefix, values: [], commands: [], args: []}</code></td>
+</tr>
+<tr>
+<td>crawl(String or CommandObj)</td>
+<td>Crawls the tree to return in search of an appropriate node. If a string is passes, it will be turned into a CommandObj. Returns <code>null</code> if nothing could be found.</td>
+<td>{Node, CommandObj} or <code>null</code></td>
+</tr>
+<tr>
+<td><code>static</code> toRootNode(Node)</td>
+<td>Same function as <code>toBlankNode()</code>.</td>
+<td>Node of type <code>root</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="command-node">Command Node</h3>
+<p><code>CommandNode</code> extends <a href="#data-node"><code>DataNode</code></a>.</p>
+<p>Type: <code>command</code>. This node adds basic data such as <code>Name</code>. <code>Description</code>, <code>Tags</code> and <code>IsNSFW</code> to <code>Node</code>.</p>
+<h4 id="constructor">Constructor</h4>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>ID of the node</td>
+<td>String</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>call</td>
+<td>Function to call when executing command</td>
+<td>Function</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>data</td>
+<td>Object with the values <code>name</code>, <code>desc</code>, <code>tags[]</code> and <code>nsfw</code></td>
+<td>JSON or JS Object</td>
+<td><code>{name: &quot;&quot;, desc: &quot;&quot;, tags: [], nsfw: false}</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="variables">Variables</h4>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Type</th>
+<th>Read-Only</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Call</td>
+<td>Function</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h4 id="methods">Methods</h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Return Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>execute()</td>
+<td>Executes <code>Call</code> as long as bot has <code>SEND_MESSAGES</code> privilages, else calls <code>command.botPermissionFail</code> event. If IsNSFW is <code>true</code>, then checks if in NSFW channel in Discord servers, if fails, calls <code>command.notInNSFW</code> event.</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>toCommandNode()</td>
+<td>Same function as <code>toDataNode()</code>, but includes the <code>Call</code> value.</td>
+<td>Node of type <code>data</code></td>
+</tr>
+<tr>
+<td><code>static</code> toCommandNode(Node, callFunc, {name: &quot;&quot;, desc: &quot;&quot;, tags: [], nsfw: false})</td>
+<td>Same function as <code>toDataNode()</code>, but includes the <code>Call</code> value.</td>
+<td>Node of type <code>command</code></td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

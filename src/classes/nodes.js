@@ -39,8 +39,10 @@ class Node {
 
     removeChild(id) {
         let index = this._children.findIndex(node => node.ID === id);
-        if(index > -1)
+        if(index > -1){
+            this._children[index].delete();
             this._children.splice(index, 1);
+        }
     }
 
     delete() {
@@ -227,7 +229,13 @@ class CommandNode extends DataNode {
         else this._call(client, command, msg);
     }
 
-    toCommandNode(node, call, data = {
+    toCommandNode() {
+        let newNode = new CommandNode(this.ID, this.call, {name: this.Name, desc: this.Description, tags: this.Tags, nsfw: this.IsNSFW});
+        newNode.Children = this.Children;
+        return newNode;
+    }
+
+    static toCommandNode(node, call, data = {
         name: "",
         desc: "",
         tags: [],

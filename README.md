@@ -1,6 +1,8 @@
 # FrameCord
 A Discord bot frameword made by Sana Rinomi.
 
+Install via NPM: `npm i -s framecord`
+
 ## Index
 * [Setting up a Bot](#setting-up-a-bot)
   * [Adding Commands](#adding-commands)

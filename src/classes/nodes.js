@@ -220,6 +220,7 @@ class CommandNode extends DataNode {
         if(msg.guild) {
             if(this.IsNSFW && !msg.channel.nsfw) {
                 client.events.throw("command.notInNSFW", CommandFail(this, client, command, msg));
+                return;
             }
 
             if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES"))

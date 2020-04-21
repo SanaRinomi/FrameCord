@@ -34,7 +34,7 @@ class ListMessage {
         await this._message.react("⬅");
         await this._message.react("➡");
 
-        this._collector = this._message.createReactionCollector(() => true, {idle: 20000});
+        this._collector = this._message.createReactionCollector(() => true, {idle: 20000, dispose: true});
 
             this._collector.on("collect", async reaction => {
                 if(reaction.me && reaction.count < 2) return;
@@ -52,7 +52,7 @@ class ListMessage {
                 }
             });
 
-            this._collector.on("dispose", async reaction => {
+            this._collector.on("remove", async reaction => {
                 switch(reaction.emoji.name) {
                     case "⬅":
                         this._message.edit(await this.onPrevious());

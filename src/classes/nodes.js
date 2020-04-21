@@ -157,7 +157,7 @@ class RootNode extends Node {
             let start = path.splice(0, 1)[0].match(this.getRegex(false));
             if(start === null) return null;
 
-            path = [...start, ...path];
+            path = [start[1], start[2], ...path];
 
             for (let i = 0; i < path.length; i++) {
                 const nodeID = path[i];

@@ -134,11 +134,11 @@ class Client {
         let commObj = this.root.getCommandObj(msg.content);
         if(!commObj) return;
 
-        let node = this.root.crawl(commObj);        
+        commObj = this.root.crawl(commObj);        
         
-        if(node.node._type === "command")
-            node.node.execute(this, node.command, msg);
-        else this.events.throw("command.nodeNotCommand", Nodes.CommandFail(node.node, this, node.command, msg));
+        if(commObj.node._type === "command")
+            commObj.node.execute(this, node.command, msg);
+        else this.events.throw("command.nodeNotCommand", Nodes.CommandFail(commObj.node, this, commObj, msg));
     }
 }
 

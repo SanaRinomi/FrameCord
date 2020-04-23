@@ -137,7 +137,8 @@ class RootNode extends Node {
             prefix: this.ID,
             values: [regexRes[1], regexRes[2]],
             commands: [],
-            args: []
+            args: [],
+            node: null
         };
 
         for (let i = 1; i < commArr.length; i++) {
@@ -177,9 +178,11 @@ class RootNode extends Node {
                 let node = currentNode.getChild(nodeID);
                 if(node === undefined){
                     command.args = command.commands.splice(i-1);
-                    return {node: currentNode, command};
+                    command.node = currentNode;
+                    return command;
                 } else if(i === command.values.length-1) {
-                    return {node: node, command};
+                    command.node = node;
+                    return command;
                 }
 
                 currentNode = node;

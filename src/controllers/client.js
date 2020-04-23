@@ -137,8 +137,8 @@ class Client {
         commObj = this.root.crawl(commObj);        
         
         if(commObj.node._type === "command")
-            commObj.node.execute(this, node.command, msg);
-        else this.events.throw("command.nodeNotCommand", Nodes.CommandFail(commObj.node, this, commObj, msg));
+            commObj.node.execute(this, commObj, msg);
+        else this.events.throw("command.nodeNotCommand", Nodes.CommandFail(commObj, this, commObj, msg));
     }
 }
 

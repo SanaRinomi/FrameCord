@@ -177,7 +177,7 @@ class RootNode extends Node {
                 const nodeID = command.values[i];
                 let node = currentNode.getChild(nodeID);
                 if(node === undefined){
-                    command.args = command.commands.splice(i-1);
+                    command.args = command.commands.splice(i);
                     command.node = currentNode;
                     return command;
                 } else if(i === command.values.length-1) {

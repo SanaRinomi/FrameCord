@@ -181,6 +181,7 @@ Type: `blank`. This node is our base node, and every other node is going to be b
 | delete() | Calls `removeChildren()` and sets all data stored within to `null`. | `null` |
 | equals(Node) | Returns `true` if the IDs and Types match between the current node and the one passed, `false` if not. | Boolean |
 | toBlankNode() | Returns a new `Node` instance with the same `ID` and `Children` as the current node. | Node of type `blank` |
+| clone() | Returns a new `Node` of the same type with the same values. | Node of same type |
 
 * Removing children will call the `delete()` function of the children.
 

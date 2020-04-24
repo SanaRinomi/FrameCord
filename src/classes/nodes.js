@@ -217,10 +217,6 @@ class RootNode extends Node {
     }
 }
 
-function CommandFail(command, client, command, msg) {
-    return {command, client, command, msg};
-}
-
 // Command Node - To be used for commands
 class CommandNode extends DataNode {
     get Call() { return this._call; }
@@ -281,6 +277,5 @@ module.exports = {
     Node,
     DataNode,
     RootNode,
-    CommandFail,
     CommandNode
 };

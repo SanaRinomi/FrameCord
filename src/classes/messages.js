@@ -1,5 +1,4 @@
 const {TextChannel} = require("discord.js");
-const {Main} = require("../controllers/logger");
 
 class ListMessage {
     get Message() { return this._message; }

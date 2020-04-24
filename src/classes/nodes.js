@@ -1,5 +1,3 @@
-const {Main} = require("../controllers/logger");
-
 // Blank Node
 class Node {
     get Type() { return this._type; }
@@ -13,6 +11,8 @@ class Node {
     set Parent(node) { return this._parent = node; }
 
     constructor(id) {
+        if(typeof id !== "string") return;
+        
         this._type = "blank";
         this._id = id.toLowerCase();
         this._children = [];
@@ -21,10 +21,11 @@ class Node {
 
     addChild(node) {
         if(this.getChild(node._id))
-            Main.error(`Node ${node._id} already exists`);
+            return null;
         else {
             node.Parent = this;
             this._children.push(node);
+            return node;
         }
     }
 
@@ -58,6 +59,10 @@ class Node {
         let newNode = new Node(this.ID);
         newNode.Children = this.Children;
         return newNode;
+    }
+
+    clone() {
+        return this.toBlankNode();
     }
 }
 
@@ -94,7 +99,7 @@ class DataNode extends Node {
     }
 
     toDataNode() {
-        let newNode = new Node(this.ID, {name: this.Name, desc: this.Description, tags: this.Tags, nsfw: this.IsNSFW});
+        let newNode = new DataNode(this.ID, {name: this.Name, desc: this.Description, tags: this.Tags, nsfw: this.IsNSFW});
         newNode.Children = this.Children;
         return newNode;
     }
@@ -108,6 +113,10 @@ class DataNode extends Node {
         let newNode = new DataNode(node.ID, data);
         newNode.Children = node.Children;
         return newNode;
+    }
+
+    clone() {
+        return this.toDataNode();
     }
 }
 
@@ -191,10 +200,20 @@ class RootNode extends Node {
         return null;
     }
 
+    toRootNode() {
+        let newNode = new RootNode(this.ID);
+        newNode.Children = this.Children;
+        return newNode;
+    }
+
     static toRootNode(node) {
         let newNode = new RootNode(node.ID);
         newNode.Children = node.Children;
         return newNode;
+    }
+
+    clone() {
+        return this.toRootNode();
     }
 }
 
@@ -222,13 +241,13 @@ class CommandNode extends DataNode {
     execute(client, command, msg) {
         if(msg.guild) {
             if(this.IsNSFW && !msg.channel.nsfw) {
-                client.events.throw("command.notInNSFW", CommandFail(this, client, command, msg));
+                client.emit("nodeNotInNSFW", this, command, msg);
                 return;
             }
 
             if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES"))
                 this._call(client, command, msg);
-            else client.events.throw("command.botPermissionFail", CommandFail(this, client, command, msg));
+            else client.emit("nodePermissionFail", this, command, msg);
         }
         else this._call(client, command, msg);
     }
@@ -251,6 +270,10 @@ class CommandNode extends DataNode {
         else newNode = new CommandNode(node.ID, call, data);
         newNode.Children = node.Children;
         return newNode;
+    }
+
+    clone() {
+        return this.toCommandNode();
     }
 }
 

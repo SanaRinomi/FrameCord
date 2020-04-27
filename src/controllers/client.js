@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const {EventEmitter} = require("events");
 const Nodes = require("../classes/nodes");
+
 // Main Class
 class Client extends EventEmitter {
     constructor(token, prefix = "", onready = null) {

@@ -71,6 +71,7 @@ class DataNode extends Node {
     get Name() { return this._name; }
     get Description() { return this._desc; }
     get Tags() { return this._tags; }
+    get Aliases() { return this._aliases; }
     get IsNSFW() { return this._nsfw; }
 
     constructor(id, data = {
@@ -87,6 +88,11 @@ class DataNode extends Node {
         this._desc = data.desc;
         this._tags = data.tags;
         this._nsfw = data.nsfw;
+        this._aliases = [];
+    }
+
+    addAlias(id) {
+        this._aliases.push(id);
     }
 
     delete() {
@@ -96,11 +102,13 @@ class DataNode extends Node {
         this._desc = null;
         this._tags = null;
         this._nsfw = null;
+        this._aliases = null;
     }
 
     toDataNode() {
         let newNode = new DataNode(this.ID, {name: this.Name, desc: this.Description, tags: this.Tags, nsfw: this.IsNSFW});
         newNode.Children = this.Children;
+        newNode._aliases = this._aliases;
         return newNode;
     }
 
@@ -175,26 +183,27 @@ class RootNode extends Node {
                 if(node === undefined){
                     return currentNode;
                 } else if(i === path.length-1) {
-                    return node;
+                    return node.Type === "alias" ? node.Target : node;
                 }
 
-                currentNode = node;
+                currentNode = node.Type === "alias" ? node.Target : node;
             }
 
         } else
             for (let i = 0; i < command.values.length; i++) {
                 const nodeID = command.values[i];
+
                 let node = currentNode.getChild(nodeID);
                 if(node === undefined){
                     command.args = command.commands.splice(i);
                     command.node = currentNode;
                     return command;
                 } else if(i === command.values.length-1) {
-                    command.node = node;
+                    command.node = node.Type === "alias" ? node.Target : node;
                     return command;
                 }
 
-                currentNode = node;
+                currentNode = node.Type === "alias" ? node.Target : node;
             }
 
         return null;
@@ -273,9 +282,22 @@ class CommandNode extends DataNode {
     }
 }
 
+class AliasNode extends Node {
+    get Target() { return this._target; }
+
+    constructor(id, target) {
+        super(id);
+
+        this._type = "alias";
+        this._target = target;
+        this._target.addAlias(id);
+    }
+}
+
 module.exports = {
     Node,
     DataNode,
     RootNode,
-    CommandNode
+    CommandNode,
+    AliasNode
 };

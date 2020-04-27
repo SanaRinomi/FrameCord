@@ -258,7 +258,7 @@ class CommandNode extends DataNode {
     }
 
     toCommandNode() {
-        let newNode = new CommandNode(this.ID, this.call, {name: this.Name, desc: this.Description, tags: this.Tags, nsfw: this.IsNSFW});
+        let newNode = new CommandNode(this.ID, this.Call, {name: this.Name, desc: this.Description, tags: this.Tags, nsfw: this.IsNSFW});
         newNode.Children = this.Children;
         return newNode;
     }

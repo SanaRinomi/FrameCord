@@ -1,5 +1,45 @@
 const {TextChannel} = require("discord.js");
 
+class ReactionMessage {
+    get Message() { return this._message; }
+    get Collector() { return this._collector; }
+    get Emotes() { return this._emotes; }
+    get Idle() { return this._idle; }
+    get onReact() { return this._onReact; }
+
+    constructor(onreact, emotes = [], message = null, idle = 20000) {
+        this._message = message;
+        this._collector = null;
+        this._idle = idle;
+        this._emotes = emotes;
+        this._onReact = onreact;
+    }
+
+    async messageInit() {
+        for (let i = 0; i < this._emotes.length; i++) {
+            await this._message.react(Number.isInteger(this._emotes[i]) ? this._message.client.emojis.get(this._emotes[i]) : this._emotes[i]);
+        }
+
+        this._collector = this._message.createReactionCollector(reaction => {return this._emotes.includes(reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name);}, {idle: this.Idle, dispose: true});
+            this._collector.on("collect", async reaction => {
+                if(reaction.me && reaction.count < 2) return;
+
+                this.onReact(this, reaction, false);
+            });
+
+            this._collector.on("remove", async reaction => {
+                this.onReact(this, reaction, true);
+            });
+    }
+
+    async send(channel, content) {
+        channel.send(content).then(msg => {
+            this._message = msg;
+            this.messageInit();
+        });
+    }
+}
+
 class ListMessage {
     get Message() { return this._message; }
     get Collector() { return this._collector; }
@@ -36,7 +76,7 @@ class ListMessage {
         this._collector = this._message.createReactionCollector(() => true, {idle: 20000, dispose: true});
 
             this._collector.on("collect", async reaction => {
-                if(reaction.me && reaction.count < 2) return;
+                if(reaction.me && reaction.count < 2) return;                
 
                 switch(reaction.emoji.name) {
                     case "⬅":
@@ -75,5 +115,6 @@ class ListMessage {
 }
 
 module.exports = {
-    ListMessage
+    ListMessage,
+    ReactionMessage
 };

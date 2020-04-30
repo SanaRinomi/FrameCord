@@ -271,7 +271,7 @@ class CommandNode extends DataNode {
     }) {
         let newNode;
         if(node instanceof DataNode)
-            newNode = new CommandNode(node.ID, call, {name: node.Name, desc: node.Description, tags: node.Tags, nsfw: node.IsNSFW});
+            newNode = new CommandNode(node.ID, node.Call, {name: node.Name, desc: node.Description, tags: node.Tags, nsfw: node.IsNSFW});
         else newNode = new CommandNode(node.ID, call, data);
         newNode.Children = node.Children;
         return newNode;
@@ -291,6 +291,25 @@ class AliasNode extends Node {
         this._type = "alias";
         this._target = target;
         this._target.addAlias(id);
+    }
+
+    toAliasNode() {
+        let newNode = new AliasNode(this.ID, this.Target);
+        newNode.Children = this.Children;
+        return newNode;
+    }
+
+    static toAliasNode(node, target) {
+        let newNode;
+        if(node instanceof AliasNode)
+            newNode = new AliasNode(node.ID, node.Target);
+        else newNode = new AliasNode(node.ID, target);
+        newNode.Children = node.Children;
+        return newNode;
+    }
+
+    clone() {
+        return this.toAliasNode();
     }
 }
 

@@ -1,3 +1,5 @@
+const {Command} = require("./command");
+
 // Blank Node
 class Node {
     get Type() { return this._type; }
@@ -136,77 +138,10 @@ class RootNode extends Node {
         this._type = "root";
     }
 
-    getRegex(includePrefix = true) {
-        let ids = [];
-        this.Children.forEach(node => {ids.push(node._id);});
-
-        return RegExp(`^${includePrefix ? this.ID : ""}(${ids.join("|")})(\\S*)`, "i");
-    }
-
-    getCommandObj(string) {
-        let commArr = string.split(" ");
-        if(commArr[0] === "") return null;
-
-        let regexRes = commArr[0].match(this.getRegex());
-        if(regexRes === null) return null;
-
-        let command = {
-            prefix: this.ID,
-            values: [regexRes[1], regexRes[2]],
-            commands: [],
-            args: [],
-            node: null
-        };
-
-        for (let i = 1; i < commArr.length; i++) {
-            command.values.push(commArr[i]);
-        }
-
-        command.commands = [...command.values];
-
-        return command;
-    }
-
-    crawl(command) {
-        let currentNode = this;
-
-        if(typeof command === "string") {
-            let path = command.split(" ");
-            let start = path.splice(0, 1)[0].match(this.getRegex(false));
-            if(start === null) return null;
-
-            path = [start[1], start[2], ...path];
-
-            for (let i = 0; i < path.length; i++) {
-                const nodeID = path[i];
-                let node = currentNode.getChild(nodeID);
-                if(node === undefined){
-                    return currentNode;
-                } else if(i === path.length-1) {
-                    return node.Type === "alias" ? node.Target : node;
-                }
-
-                currentNode = node.Type === "alias" ? node.Target : node;
-            }
-
-        } else
-            for (let i = 0; i < command.values.length; i++) {
-                const nodeID = command.values[i];
-
-                let node = currentNode.getChild(nodeID);
-                if(node === undefined){
-                    command.args = command.commands.splice(i);
-                    command.node = currentNode;
-                    return command;
-                } else if(i === command.values.length-1) {
-                    command.node = node.Type === "alias" ? node.Target : node;
-                    return command;
-                }
-
-                currentNode = node.Type === "alias" ? node.Target : node;
-            }
-
-        return null;
+    crawl(string) {
+        let comm = new Command(this, string);
+        if(comm.IsPopulated) return comm;
+        else return null;
     }
 
     toRootNode() {

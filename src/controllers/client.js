@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const {EventEmitter} = require("events");
 const Nodes = require("../classes/nodes");
+const {Command} = require("../classes/command");
 
 // Main Class
 class Client extends EventEmitter {
@@ -54,7 +55,7 @@ class Client extends EventEmitter {
         let parentNode;
         if(!path)
             parentNode = this.root;
-        else parentNode = this.root.crawl(path);
+        else parentNode = (new Command(this.root, path, false)).Node;
 
         if(!parentNode) {
             this.emit("nodeRegisterFail", node);
@@ -68,13 +69,14 @@ class Client extends EventEmitter {
 
     // Run this to execute a command
     executeNode(msg) {
-        let commObj = this.root.getCommandObj(msg.content);
-        if(!commObj) return;
+        if(msg.author.id === this.discordCli.user.id)
+            return;
 
-        commObj = this.root.crawl(commObj);        
+        let commObj = this.root.crawl(msg.content);
+        if(!commObj) return;
         
-        if(commObj.node._type === "command")
-            commObj.node.execute(this, commObj, msg);
+        if(commObj.Node.Type === "command")
+            commObj.Node.execute(this, commObj, msg);
         else this.emit("nodeNotCommand", commObj, msg);
     }
 }

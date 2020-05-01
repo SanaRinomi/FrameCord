@@ -167,7 +167,7 @@ class CommandNode extends DataNode {
     set Call(func) { this._call = func; }
     get Args() { return this._args; }
     get HasArgs() { return this._args.length > 0; }
-    get ArgsRequired() { return !this._args[0].optional; }
+    get ArgsRequired() { return this._args[0] ? !this._args[0].optional : false; }
 
     constructor(id, call, data = {
         name: "",

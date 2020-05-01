@@ -165,7 +165,11 @@ class RootNode extends Node {
 class CommandNode extends DataNode {
     get Call() { return this._call; }
     set Call(func) { this._call = func; }
+    get Arguments() { return this._args; }
     get Args() { return this._args; }
+    set Arguments(arr) { this._args = arr; }
+    set Args(arr) { this._args = arr; }
+    get HasArguments() { return this._args.length > 0; }
     get HasArgs() { return this._args.length > 0; }
     get ArgsRequired() { return this._args[0] ? !this._args[0].optional : false; }
 
@@ -270,6 +274,7 @@ class CommandNode extends DataNode {
     toCommandNode() {
         let newNode = new CommandNode(this.ID, this.Call, {name: this.Name, desc: this.Description, tags: this.Tags, nsfw: this.IsNSFW});
         newNode.Children = this.Children;
+        newNode.Arguments = this.Arguments;
         return newNode;
     }
 
@@ -277,11 +282,12 @@ class CommandNode extends DataNode {
         name: "",
         desc: "",
         tags: [],
-        nsfw: false
+        nsfw: false,
+        args: []
     }) {
         let newNode;
         if(node instanceof DataNode)
-            newNode = new CommandNode(node.ID, node.Call, {name: node.Name, desc: node.Description, tags: node.Tags, nsfw: node.IsNSFW});
+            newNode = new CommandNode(node.ID, node.Call, {name: node.Name, desc: node.Description, tags: node.Tags, nsfw: node.IsNSFW, args: data.args});
         else newNode = new CommandNode(node.ID, call, data);
         newNode.Children = node.Children;
         return newNode;

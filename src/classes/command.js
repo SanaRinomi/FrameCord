@@ -100,7 +100,7 @@ class Command {
             arg = arg.filter(val => val !== undefined);
             arg.shift();
             
-            if(Number.isInteger(arg[0])) {
+            if(!isNaN(arg[0])) {
                 args.push(new Argument(i, arg[0], "number"));
             } else if(arg[2] !== undefined) {
                 switch(arg[1]) {
@@ -124,9 +124,11 @@ class Command {
                     case "true":
                     case "yes":
                         args.push(new Argument(i, true, "boolean"));
+                        break;
                     case "false":
                     case "no":
                         args.push(new Argument(i, false, "boolean"));
+                        break;
                     default:
                         args.push(new Argument(i, arg[1], "string"));
                         break;

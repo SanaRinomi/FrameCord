@@ -86,10 +86,10 @@ class DataNode extends Node {
 
         this._type = "data";
 
-        this._name = data.name ? data.name : id;
-        this._desc = data.desc;
-        this._tags = data.tags;
-        this._nsfw = data.nsfw;
+        this._name = data.name ? data.name : id.charAt(0).toUpperCase() + id.slice(1).toLowerCase();
+        this._desc = data.desc ? data.desc : "";
+        this._tags = data.tags ? data.tags : [];
+        this._nsfw = data.nsfw !== undefined ? data.nsfw : false;
         this._aliases = [];
     }
 
@@ -165,17 +165,70 @@ class RootNode extends Node {
 class CommandNode extends DataNode {
     get Call() { return this._call; }
     set Call(func) { this._call = func; }
+    get Args() { return this._args; }
+    get HasArgs() { return this._args.length > 0; }
+    get ArgsRequired() { return !this._args[0].optional; }
 
     constructor(id, call, data = {
         name: "",
         desc: "",
         tags: [],
+        args: null,
         nsfw: false
     }) {
         super(id, data);
 
         this._type = "command";
         this._call = call;
+        this._args = [];
+        if(Array.isArray(data.args)) this.setArgs(data.args);
+    }
+
+    setArgs(arr) {
+        this._args = [];
+        arr.forEach(elem => {
+            if(!elem) return;
+            if(typeof elem === "string")
+                this._args.push({name: elem, type: "any", optional: true});
+            else {
+                this._args.push({
+                    name: elem.name,
+                    type: elem.type ? elem.type : "any",
+                    optional: elem.optional !== undefined ? elem.optional : true
+                });
+            }
+        });
+
+        this._args.sort((a, b) => {
+            if((a.optional && b.optional) || (!a.optional && !b.optional))
+                return 0;
+            if(!a.optional && b.optional)
+                return -1;
+            if(a.optional && !b.optional)
+                return 1;
+        });
+    }
+
+    addArg(elem) {
+        if(!elem) return;
+        if(typeof elem === "string")
+            this._args.push({name: elem, type: "any", optional: true});
+        else {
+            this._args.push({
+                name: elem.name,
+                type: elem.type ? elem.type : "any",
+                optional: elem.optional !== undefined ? elem.optional : true
+            });
+        }
+
+        this._args.sort((a, b) => {
+            if((a.optional && b.optional) || (!a.optional && !b.optional))
+                return 0;
+            if(!a.optional && b.optional)
+                return -1;
+            if(a.optional && !b.optional)
+                return 1;
+        });
     }
 
     execute(client, command, msg) {
@@ -185,8 +238,30 @@ class CommandNode extends DataNode {
                 return;
             }
 
-            if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES"))
+            if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES")) {
+                if(!this.HasArgs || (command.Args.length === 0 && !this.ArgsRequired)){
+                    this._call(client, command, msg);
+                    return;
+                }
+
+                for (let i = 0; i < this.Args.length; i++) {
+                    const arg = this.Args[i];
+                    if(command.Args[i] === undefined){
+                        if(!arg.optional){
+                            msg.reply(`You are missing the argument \`${arg.name}\`${arg.type !== "any" ? " of type `" + arg.type + "`" : ""}`);
+                            return;
+                        } else break;
+                    }
+                    if(arg.type !== "any" && command.Args[i].Type !== arg.type){
+                        msg.reply(`The argument \`${command.Args[i].Value}\` needs to be of type \`${arg.type}\` not \`${command.Args[i].Type}\``);
+                        return;
+                    }
+                }
+
                 this._call(client, command, msg);
+                return;
+                
+            }
             else client.emit("nodePermissionFail", this, command, msg);
         }
         else this._call(client, command, msg);

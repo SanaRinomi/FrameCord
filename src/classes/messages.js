@@ -6,13 +6,19 @@ class ReactionMessage {
     get Emotes() { return this._emotes; }
     get Idle() { return this._idle; }
     get onReact() { return this._onReact; }
+    get onEnd() { return this._onEnd; }
+    set onEnd(func) { this._onEnd = func; }
+    get OnlyFireOnce() { return this._once; }
+    get FireOnce() { return this._once; }
 
-    constructor(onreact, emotes = [], message = null, idle = 20000) {
+    constructor(onreact, emotes = [], fireonce = false, message = null, idle = 20000) {
         this._message = message;
         this._collector = null;
         this._idle = idle;
         this._emotes = emotes;
         this._onReact = onreact;
+        this._onEnd;
+        this._once = fireonce;
     }
 
     async messageInit() {
@@ -25,10 +31,18 @@ class ReactionMessage {
                 if(reaction.me && reaction.count < 2) return;
 
                 this.onReact(this, reaction, false);
+
+                if(this.OnlyFireOnce)
+                    this._collector.stop("fireonce");
             });
 
             this._collector.on("remove", async reaction => {
                 this.onReact(this, reaction, true);
+            });
+
+            this._collector.on("end", async (col, reason) => {
+                if(reason !== "fireonce")
+                    this.onEnd(this, col, reason);
             });
     }
 

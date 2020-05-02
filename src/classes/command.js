@@ -18,15 +18,22 @@ class StringArgument extends Argument {
     get IsMultiline() { return this._multiLine; }
 
     constructor(position, value, multiline = false) {
-        super(position, value, "string");
+        super(position, value.replace(/\\("|'|`)/gm, "$1"), "string");
         this._multiLine = multiline;
     }
 
     toCode(codeblock = false) {
+        let str = this.Value;
+        if(this.Value.charAt(this.Value.length - 1) === "`")
+            str += " ";
+        if (this.Value.charAt(0) === "`")
+            str =  " " + str;
+        console.log(`"${str}"`);
+                
         if(this._multiLine)
-            return "```" + this.Value + "```";
-        else if (codeblock) return "```\n" + this.Value + "```";
-        else return "`" + this.Value + "`";
+            return "```" + str + "```";
+        else if (codeblock) return "```\n" + str + "```";
+        else return "``" + str + "``";
     }
 }
 
@@ -110,7 +117,7 @@ class Command {
     }
 
     genArguments(str) {
-        let args = [], rawArgs = [...str.matchAll(/((```)([\s\S]*?(?<!\\))```|`(.*?(?<!\\))`|'(.*?(?<!\\))'|"(.*?(?<!\\))"|<(?:(@|@!|@&|a:|:))(?:([^\s|><]+):)?(\d+)>|(\S+))\s?/gm)];
+        let args = [], rawArgs = [...str.matchAll(/((```)([\s\S]*?(?<!\\))```|(``)([\s\S]*?(?<!\\))``|`(.*?(?<!\\))`|'(.*?(?<!\\))'|"(.*?(?<!\\))"|<(?:(@|@!|@&|a:|:))(?:([^\s|><]+):)?(\d+)>|(\S+))\s?/gm)];
 
         rawArgs.forEach((arg, i) => {
             arg = arg.filter(val => val !== undefined);
@@ -133,6 +140,9 @@ class Command {
                         break;
                     case "```":
                         args.push(new StringArgument(i, arg[2], true));
+                        break;
+                    case "``":
+                        args.push(new StringArgument(i, arg[2]));
                         break;
                     default:
                         args.push(new Argument(i, arg[0], "unknown"));

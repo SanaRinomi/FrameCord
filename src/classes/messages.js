@@ -54,6 +54,55 @@ class ReactionMessage {
     }
 }
 
+class ConfirmationMessage {
+    get Message() { return this._message; }
+    get Collector() { return this._collector; }
+    get Emotes() { return this._emotes; }
+    get ConfirmationEmote() { return this._conf; }
+    get DenialEmote() { return this._deny; }
+    get onReact() { return this._onReact; }
+
+    constructor(onreact, emotes = {conf: "", deny: ""}, message = null) {
+        this._message = message;
+        this._collector = null;
+        this._idle = 20000;
+        this._conf = emotes.conf;
+        this._deny = emotes.deny;
+        this._onReact = onreact;
+    }
+
+    async messageInit() {
+        for (let i = 0; i < this._emotes.length; i++) {
+            await this._message.react(Number.isInteger(this._emotes[i]) ? this._message.client.emojis.get(this._emotes[i]) : this._emotes[i]);
+        }
+
+        this._collector = this._message.createReactionCollector(reaction => {return this._emotes.includes(reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name);}, {idle: this.Idle, dispose: true});
+            this._collector.on("collect", async reaction => {
+                if(reaction.me && reaction.count < 2) return;
+
+                this.onReact(this, reaction, false);
+
+                this._collector.stop("fireonce");
+            });
+
+            this._collector.on("remove", async reaction => {
+                this.onReact(this, reaction, true);
+            });
+
+            this._collector.on("end", async (col, reason) => {
+                if(reason !== "fireonce")
+                    this.Message.edit("This message has expired...!");
+            });
+    }
+
+    async send(channel, content) {
+        channel.send(content).then(msg => {
+            this._message = msg;
+            this.messageInit();
+        });
+    }
+}
+
 class ListMessage {
     get Message() { return this._message; }
     get Collector() { return this._collector; }

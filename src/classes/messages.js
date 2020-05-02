@@ -27,17 +27,17 @@ class ReactionMessage {
         }
 
         this._collector = this._message.createReactionCollector(reaction => {return this._emotes.includes(reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name);}, {idle: this.Idle, dispose: true});
-            this._collector.on("collect", async reaction => {
+            this._collector.on("collect", async (reaction, user) => {
                 if(reaction.me && reaction.count < 2) return;
 
-                this.onReact(this, reaction, false);
+                this.onReact(this, reaction, user, false);
 
                 if(this.OnlyFireOnce)
                     this._collector.stop("fireonce");
             });
 
-            this._collector.on("remove", async reaction => {
-                this.onReact(this, reaction, true);
+            this._collector.on("remove", async (reaction, user) => {
+                this.onReact(this, reaction, user, true);
             });
 
             this._collector.on("end", async (col, reason) => {
@@ -57,36 +57,40 @@ class ReactionMessage {
 class ConfirmationMessage {
     get Message() { return this._message; }
     get Collector() { return this._collector; }
-    get Emotes() { return this._emotes; }
-    get ConfirmationEmote() { return this._conf; }
+    get UserID() { return this._user; }
+    get Emotes() { return [this._accept, this._deny]; }
+    get ConfirmationEmote() { return this._accept; }
     get DenialEmote() { return this._deny; }
-    get onReact() { return this._onReact; }
+    get onAccept() { return this._onAccept; }
+    get onDeny() { return this._onDeny; }
 
-    constructor(onreact, emotes = {conf: "", deny: ""}, message = null) {
+    constructor(userID, onaccept, ondeny = null, emotes = {accept: "✅", deny: "❌"}, message = null) {
         this._message = message;
         this._collector = null;
         this._idle = 20000;
-        this._conf = emotes.conf;
-        this._deny = emotes.deny;
-        this._onReact = onreact;
+        this._user = userID;
+        this._accept = emotes.accept ? emotes.accept : "✅";
+        this._deny = emotes.deny ? emotes.deny : "❌";
+        this._onAccept = onaccept;
+        this._onDeny = ondeny ? ondeny : () => {
+            this.Message.edit("Action cancelled...!");
+        };
     }
 
     async messageInit() {
-        for (let i = 0; i < this._emotes.length; i++) {
-            await this._message.react(Number.isInteger(this._emotes[i]) ? this._message.client.emojis.get(this._emotes[i]) : this._emotes[i]);
+        for (let i = 0; i < this.Emotes.length; i++) {
+            await this._message.react(Number.isInteger(this.Emotes[i]) ? this._message.client.emojis.get(this.Emotes[i]) : this.Emotes[i]);
         }
 
-        this._collector = this._message.createReactionCollector(reaction => {return this._emotes.includes(reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name);}, {idle: this.Idle, dispose: true});
-            this._collector.on("collect", async reaction => {
-                if(reaction.me && reaction.count < 2) return;
+        this._collector = this._message.createReactionCollector(reaction => {return (this.ConfirmationEmote === reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name) || (this.DenialEmote === reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name);}, {idle: this._idle, dispose: true});
+            this._collector.on("collect", async (reaction, user) => {
+                if(user.id !== this.UserID) return;
 
-                this.onReact(this, reaction, false);
+                if(this.ConfirmationEmote === (reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name))
+                    this.onAccept(this, user);
+                else this.onDeny(this, user);
 
                 this._collector.stop("fireonce");
-            });
-
-            this._collector.on("remove", async reaction => {
-                this.onReact(this, reaction, true);
             });
 
             this._collector.on("end", async (col, reason) => {
@@ -138,7 +142,7 @@ class ListMessage {
 
         this._collector = this._message.createReactionCollector(() => true, {idle: 20000, dispose: true});
 
-            this._collector.on("collect", async reaction => {
+            this._collector.on("collect", async (reaction, user) => {
                 if(reaction.me && reaction.count < 2) return;                
 
                 switch(reaction.emoji.name) {
@@ -149,7 +153,7 @@ class ListMessage {
                         this._message.edit(await this.onNext());
                         break;
                     default:
-                        if(this._onReact) this.onReact(this, reaction, false);
+                        if(this._onReact) this.onReact(this, reaction, user, false);
                         break;
                 }
             });
@@ -179,5 +183,6 @@ class ListMessage {
 
 module.exports = {
     ListMessage,
+    ConfirmationMessage,
     ReactionMessage
 };

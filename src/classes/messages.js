@@ -86,11 +86,11 @@ class ConfirmationMessage {
             this._collector.on("collect", async (reaction, user) => {
                 if(user.id !== this.UserID) return;
 
+                this._collector.stop("fireonce");
+
                 if(this.ConfirmationEmote === (reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name))
                     this.onAccept(this, user);
                 else this.onDeny(this, user);
-
-                this._collector.stop("fireonce");
             });
 
             this._collector.on("end", async (col, reason) => {

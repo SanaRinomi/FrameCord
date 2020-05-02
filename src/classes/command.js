@@ -14,6 +14,22 @@ class Argument {
     }
 }
 
+class StringArgument extends Argument {
+    get IsMultiline() { return this._multiLine; }
+
+    constructor(position, value, multiline = false) {
+        super(position, value, "string");
+        this._multiLine = multiline;
+    }
+
+    toCode(codeblock = false) {
+        if(this._multiLine)
+            return "```" + this.Value + "```";
+        else if (codeblock) return "```\n" + this.Value + "```";
+        else return "`" + this.Value + "`";
+    }
+}
+
 class EmoteArgument extends Argument {
     get Name(){ return this._name; }
     get ID(){ return this._id; }
@@ -94,7 +110,7 @@ class Command {
     }
 
     genArguments(str) {
-        let args = [], rawArgs = [...str.matchAll(/("(.*?(?<!\\))"|<(?:(@|@!|@&|a:|:))(?:([^\s|><]+):)?(\d+)>|(\S+))\s?/gm)];
+        let args = [], rawArgs = [...str.matchAll(/((```)([\s\S]*?(?<!\\))```|`(.*?(?<!\\))`|'(.*?(?<!\\))'|"(.*?(?<!\\))"|<(?:(@|@!|@&|a:|:))(?:([^\s|><]+):)?(\d+)>|(\S+))\s?/gm)];
 
         rawArgs.forEach((arg, i) => {
             arg = arg.filter(val => val !== undefined);
@@ -115,6 +131,9 @@ class Command {
                     case "@!":
                         args.push(new UserArgument(i, arg[0], arg[2]));
                         break;
+                    case "```":
+                        args.push(new StringArgument(i, arg[2], true));
+                        break;
                     default:
                         args.push(new Argument(i, arg[0], "unknown"));
                         break;
@@ -129,8 +148,15 @@ class Command {
                     case "no":
                         args.push(new Argument(i, false, "boolean"));
                         break;
+                    case "none":
+                    case "null":
+                    case "''":
+                    case "``````":
+                    case "\"\"":
+                            args.push(new Argument(i, null, "empty"));
+                            break;
                     default:
-                        args.push(new Argument(i, arg[1], "string"));
+                        args.push(new StringArgument(i, arg[1]));
                         break;
                 }
             }

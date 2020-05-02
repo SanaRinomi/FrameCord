@@ -165,6 +165,10 @@ class RootNode extends Node {
 class CommandNode extends DataNode {
     get Call() { return this._call; }
     set Call(func) { this._call = func; }
+    get Permissions() { return this._perms; }
+    get Perms() { return this._perms; }
+    set Permissions(arr) { this._perms = arr; }
+    set Perms(arr) { this._perms = arr; }
     get Arguments() { return this._args; }
     get Args() { return this._args; }
     set Arguments(arr) { this._args = arr; }
@@ -178,13 +182,15 @@ class CommandNode extends DataNode {
         desc: "",
         tags: [],
         args: null,
-        nsfw: false
+        nsfw: false,
+        perms: ["SEND_MESSAGES"]
     }) {
         super(id, data);
 
         this._type = "command";
         this._call = call;
         this._args = [];
+        this._perms = Array.isArray(data.perms) ? data.perms : ["SEND_MESSAGES"];
         if(Array.isArray(data.args)) this.setArgs(data.args);
     }
 
@@ -242,7 +248,8 @@ class CommandNode extends DataNode {
                 return;
             }
 
-            if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES")) {
+            console.log(`Bot: ${msg.guild.member(client.discordCli.user).hasPermission(this.Permissions)}, User: ${msg.member.hasPermission(this.Permissions)}`);
+            if(msg.guild.member(client.discordCli.user).hasPermission(this.Permissions) && msg.member.hasPermission(this.Permissions)) {
                 if(!this.HasArgs || (command.Args.length === 0 && !this.ArgsRequired)){
                     this._call(client, command, msg);
                     return;
@@ -266,6 +273,8 @@ class CommandNode extends DataNode {
                 return;
                 
             }
+            else if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES"))
+                msg.reply("Insufficient permissions to execute this command!");
             else client.emit("nodePermissionFail", this, command, msg);
         }
         else this._call(client, command, msg);

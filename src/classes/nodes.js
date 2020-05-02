@@ -248,7 +248,6 @@ class CommandNode extends DataNode {
                 return;
             }
 
-            console.log(`Bot: ${msg.guild.member(client.discordCli.user).hasPermission(this.Permissions)}, User: ${msg.member.hasPermission(this.Permissions)}`);
             if(msg.guild.member(client.discordCli.user).hasPermission(this.Permissions) && msg.member.hasPermission(this.Permissions)) {
                 if(!this.HasArgs || (command.Args.length === 0 && !this.ArgsRequired)){
                     this._call(client, command, msg);

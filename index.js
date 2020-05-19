@@ -7,5 +7,6 @@ module.exports = {
     Nodes,
     Client,
     ...Messages,
-    ...CommandClasses
+    ...CommandClasses,
+    discordjs: require("discord.js")
 };

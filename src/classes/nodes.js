@@ -165,10 +165,12 @@ class RootNode extends Node {
 class CommandNode extends DataNode {
     get Call() { return this._call; }
     set Call(func) { this._call = func; }
-    get Permissions() { return this._perms; }
-    get Perms() { return this._perms; }
-    set Permissions(arr) { this._perms = arr; }
-    set Perms(arr) { this._perms = arr; }
+    get Permissions() { return this._perms.all; }
+    get BotPermissions() { return this._perms.bot; }
+    get UserPermissions() { return this._perms.user; }
+    get Perms() { return this._perms.all; }
+    get BotPerms() { return this._perms.bot; }
+    get UserPerms() { return this._perms.user; }
     get Arguments() { return this._args; }
     get Args() { return this._args; }
     set Arguments(arr) { this._args = arr; }
@@ -190,8 +192,34 @@ class CommandNode extends DataNode {
         this._type = "command";
         this._call = call;
         this._args = [];
-        this._perms = Array.isArray(data.perms) ? data.perms : ["SEND_MESSAGES"];
+        this._perms = {
+            all: [],
+            user: [],
+            bot: []
+        };
+
         if(Array.isArray(data.args)) this.setArgs(data.args);
+        this.setPermissions(data.perms);
+    }
+
+    setPermissions(arr) {
+        if(Array.isArray(arr)){
+            arr.forEach(v => {
+                if(typeof v !== "object") {
+                    this._perms.all.push(v);
+                    this._perms.user.push(v);
+                    this._perms.bot.push(v);
+                } else {
+                    this._perms.all.push(v.type);
+
+                    if(v.user)
+                        this._perms.user.push(v.type);
+                    if(v.bot)
+                        this._perms.bot.push(v.type);
+                }
+            });
+        } else
+            this._perms = {all: ["SEND_MESSAGES"], user: ["SEND_MESSAGES"], bot: ["SEND_MESSAGES"]};
     }
 
     setArgs(arr) {
@@ -243,37 +271,61 @@ class CommandNode extends DataNode {
 
     execute(client, command, msg) {
         if(msg.guild) {
-            if(this.IsNSFW && !msg.channel.nsfw) {
+            if(this.IsNSFW && !msg.channel.nsfw && !client.NSFWEverywhere) {
                 client.emit("nodeNotInNSFW", this, command, msg);
                 return;
             }
 
-            if(msg.guild.member(client.discordCli.user).hasPermission(this.Permissions) && msg.member.hasPermission(this.Permissions)) {
-                if(!this.HasArgs || (command.Args.length === 0 && !this.ArgsRequired)){
-                    this._call(client, command, msg);
-                    return;
-                }
-
-                for (let i = 0; i < this.Args.length; i++) {
-                    const arg = this.Args[i];
-                    if(command.Args[i] === undefined){
-                        if(!arg.optional){
-                            msg.reply(`You are missing the argument \`${arg.name}\`${arg.type !== "any" ? " of type `" + arg.type + "`" : ""}`);
-                            return;
-                        } else break;
-                    }
-                    if(arg.type !== "any" && command.Args[i].Type !== arg.type){
-                        msg.reply(`The argument \`${command.Args[i].Value}\` needs to be of type \`${arg.type}\` not \`${command.Args[i].Type}\``);
+            if(msg.guild.member(client.discordCli.user).hasPermission(this.BotPermissions)) {
+                if(msg.member.hasPermission(this.UserPermissions)) {
+                    if(!this.HasArgs || (command.Args.length === 0 && !this.ArgsRequired)){
+                        this._call(client, command, msg);
                         return;
                     }
-                }
 
-                this._call(client, command, msg);
-                return;
-                
+                    for (let i = 0; i < this.Args.length; i++) {
+                        const arg = this.Args[i];
+                        if(command.Args[i] === undefined){
+                            if(!arg.optional){
+                                msg.reply(`You are missing the argument \`${arg.name}\`${arg.type !== "any" ? " of type `" + arg.type + "`" : ""}`);
+                                return;
+                            } else break;
+                        }
+
+                        if(Array.isArray(arg.type)) {
+                            let bool = false;
+                            let failed = [];
+                            if(command.Args[i] === undefined && arg.optional) {
+                                bool = true;
+                            }
+
+                            arg.type.forEach(v => {
+                                if(command.Args[i].Type === v) bool = true;
+                                else failed.push(v);
+                            });
+
+                            if(!bool) {
+                                msg.reply(`The argument \`${command.Args[i].Value}\` needs to be of type \`${failed.join("`, `")}\` not \`${command.Args[i].Type}\``);
+                                return;
+                            }
+                        } else {
+                            if(arg.type !== "any"  && (command.Args[i].Type !== arg.type && (command.Args[i] !== undefined || !arg.optional))){
+                                msg.reply(`The argument \`${command.Args[i].Value}\` needs to be of type \`${arg.type}\` not \`${command.Args[i].Type}\``);
+                                return;
+                            }
+                        }
+                    }
+
+                    this._call(client, command, msg);
+                    return;
+                    
+                }
+                else if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES"))
+                    msg.reply("Insufficient user permissions to execute this command!");
+                else client.emit("nodePermissionFail", this, command, msg);
             }
             else if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES"))
-                msg.reply("Insufficient permissions to execute this command!");
+                msg.reply("Insufficient bot permissions to execute this command!");
             else client.emit("nodePermissionFail", this, command, msg);
         }
         else this._call(client, command, msg);

@@ -21,7 +21,7 @@ We create a `Client` and then we use the `login()` function to start the bot!
 ```javascript
 const {Client} = require("framecord");
 
-let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${cli.discordCli.user.tag}`); });
+let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${client.discordCli.user.tag}`); });
 
 client.login();
 ```
@@ -34,7 +34,7 @@ In this example we will use a `DataNode` with the ID of `!` and add it to our cl
 ```javascript
 const {Client, Nodes} = require("framecord");
 
-let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${cli.discordCli.user.tag}`); });
+let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${client.discordCli.user.tag}`); });
 
 let Base = new Nodes.DataNode("!");
 
@@ -50,7 +50,7 @@ Here's how we create a command:
 ```javascript
 const {Client, Nodes} = require("framecord");
 
-let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${cli.discordCli.user.tag}`); });
+let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${client.discordCli.user.tag}`); });
 
 let Base = new Nodes.DataNode("!");
 let Exit = new Nodes.CommandNode("exit", (cli, command, msg) => {
@@ -76,7 +76,7 @@ This example shows the use of `addChild(Node)`:
 ```javascript
 const {Client, Nodes} = require("framecord");
 
-let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${cli.discordCli.user.tag}`); });
+let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${client.discordCli.user.tag}`); });
 
 let Base = new Nodes.DataNode("!");
 let Exit = new Nodes.CommandNode("exit", (cli, command, msg) => {
@@ -98,7 +98,7 @@ This example shows the use of your client's `registerNode(Node, String)` method 
 ```javascript
 const {Client, Nodes} = require("framecord");
 
-let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${cli.discordCli.user.tag}`); });
+let client = new Client("Discord bot token", "d", function(client) { console.log(`Logged in as ${client.discordCli.user.tag}`); });
 
 let Base = new Nodes.DataNode("!");
 let Exit = new Nodes.CommandNode("exit", (cli, command, msg) => {

@@ -10,7 +10,7 @@ class Argument {
     }
 
     toString() {
-        return `${this.Value} (${this.Type})`;
+        return `${this.Value}`;
     }
 }
 
@@ -28,7 +28,6 @@ class StringArgument extends Argument {
             str += " ";
         if (this.Value.charAt(0) === "`")
             str =  " " + str;
-        console.log(`"${str}"`);
                 
         if(this._multiLine)
             return "```" + str + "```";
@@ -55,6 +54,15 @@ class UserArgument extends Argument {
 
     constructor(position, value, id) {
         super(position, value, "user");
+        this._id = id;
+    }
+}
+
+class ChannelArgument extends Argument {
+    get ID(){ return this._id; }
+
+    constructor(position, value, id) {
+        super(position, value, "channel");
         this._id = id;
     }
 }
@@ -117,7 +125,7 @@ class Command {
     }
 
     genArguments(str) {
-        let args = [], rawArgs = [...str.matchAll(/((```)([\s\S]*?(?<!\\))```|(``)([\s\S]*?(?<!\\))``|`(.*?(?<!\\))`|'(.*?(?<!\\))'|"(.*?(?<!\\))"|<(?:(@|@!|@&|a:|:))(?:([^\s|><]+):)?(\d+)>|(\S+))\s?/gm)];
+        let args = [], rawArgs = [...str.matchAll(/((```)([\s\S]*?(?<!\\))```|(``)([\s\S]*?(?<!\\))``|`(.*?(?<!\\))`|'(.*?(?<!\\))'|"(.*?(?<!\\))"|<(?:(@|@!|@&|a:|:|#))(?:([^\s|><]+):)?(\d+)>|(\S+))\s?/gm)];
 
         rawArgs.forEach((arg, i) => {
             arg = arg.filter(val => val !== undefined);
@@ -137,6 +145,9 @@ class Command {
                     case "@&":
                     case "@!":
                         args.push(new UserArgument(i, arg[0], arg[2]));
+                        break;
+                    case "#":
+                        args.push(new ChannelArgument(i, arg[0], arg[2]));
                         break;
                     case "```":
                         args.push(new StringArgument(i, arg[2], true));

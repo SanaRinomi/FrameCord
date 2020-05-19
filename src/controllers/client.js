@@ -12,6 +12,7 @@ class Client extends EventEmitter {
         this.token = token;
         this.prefix = prefix;
         this._onready = onready;
+        this.NSFWEverywhere = false;
         
         this.root = new Nodes.RootNode(prefix);
     }

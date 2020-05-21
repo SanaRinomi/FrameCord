@@ -67,6 +67,15 @@ class ChannelArgument extends Argument {
     }
 }
 
+class RoleArgument extends Argument {
+    get ID(){ return this._id; }
+
+    constructor(position, value, id) {
+        super(position, value, "role");
+        this._id = id;
+    }
+}
+
 class Command {
     get RootNode() { return this._rootNode; }
     get Root() { return this._rootNode; }
@@ -142,9 +151,11 @@ class Command {
                         args.push(new EmoteArgument(i, arg[0], arg[2], arg[3], true));
                         break;
                     case "@":
-                    case "@&":
                     case "@!":
                         args.push(new UserArgument(i, arg[0], arg[2]));
+                        break;
+                    case "@&":
+                        args.push(new RoleArgument(i, arg[0], arg[2]));
                         break;
                     case "#":
                         args.push(new ChannelArgument(i, arg[0], arg[2]));

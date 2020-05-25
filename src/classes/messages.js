@@ -3,6 +3,7 @@ const {TextChannel} = require("discord.js");
 class ReactionMessage {
     get Message() { return this._message; }
     get Collector() { return this._collector; }
+    get UserID() { return this._user; }
     get Emotes() { return this._emotes; }
     get Idle() { return this._idle; }
     get onReact() { return this._onReact; }
@@ -11,9 +12,10 @@ class ReactionMessage {
     get OnlyFireOnce() { return this._once; }
     get FireOnce() { return this._once; }
 
-    constructor(onreact, emotes = [], fireonce = false, message = null, idle = 20000) {
+    constructor(userID, onreact, emotes = [], fireonce = false, message = null, idle = 20000) {
         this._message = message;
         this._collector = null;
+        this._user = userID;
         this._idle = idle;
         this._emotes = emotes;
         this._onReact = onreact;
@@ -28,6 +30,7 @@ class ReactionMessage {
 
         this._collector = this._message.createReactionCollector(reaction => {return this._emotes.includes(reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name);}, {idle: this.Idle, dispose: true});
             this._collector.on("collect", async (reaction, user) => {
+                if(this.UserID && user.id !== this.UserID) return;
                 if(reaction.me && reaction.count < 2) return;
 
                 this.onReact(this, reaction, user, false);
@@ -110,6 +113,7 @@ class ConfirmationMessage {
 class ListMessage {
     get Message() { return this._message; }
     get Collector() { return this._collector; }
+    get UserID() { return this._user; }
     get Index() { return this._index; }
     set Index(int) { this._index = int; }
     get IndexLimit() { return this._indexLimit; }
@@ -132,9 +136,10 @@ class ListMessage {
     get OnlyFireOnce() { return this._once; }
     get FireOnce() { return this._once; }
 
-    constructor(onlistupdate, onreact = {func: null, emotes: null, fireonce: false}, message = null, index = 0, indexLimit = null) {
+    constructor(userID, onlistupdate, onreact = {func: null, emotes: null, fireonce: false}, message = null, index = 0, indexLimit = null) {
         this._message = message;
         this._collector = null;
+        this._user = userID;
         this._index = index;
         this._indexLimit;
         this._onListUpdate = onlistupdate;
@@ -155,7 +160,8 @@ class ListMessage {
         this._collector = this._message.createReactionCollector(reaction => {return this._emotes && this._emotes.includes(reaction.emoji.id ? reaction.emoji.id : reaction.emoji.name) ? true : reaction.emoji.name === "⬅" || reaction.emoji.name === "➡" ? true : false ;}, {idle: 20000, dispose: true});
 
             this._collector.on("collect", async (reaction, user) => {
-                if(reaction.me && reaction.count < 2) return;        
+                if(this.UserID && user.id !== this.UserID) return;
+                if(reaction.me && reaction.count < 2) return;
 
                 switch(reaction.emoji.name) {
                     case "⬅":

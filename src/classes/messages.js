@@ -45,7 +45,7 @@ class ReactionMessage {
             });
 
             this._collector.on("end", async (col, reason) => {
-                if(reason !== "fireonce")
+                if(reason !== "fireonce" && typeof this.onEnd === "function")
                     this.onEnd(this, col, reason);
             });
     }

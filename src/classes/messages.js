@@ -179,7 +179,7 @@ class ListMessage {
                 }
             });
 
-            this._collector.on("remove", async reaction => {
+            this._collector.on("remove", async (reaction, user) => {
                 if(this.UserID && user.id !== this.UserID) return;
                 switch(reaction.emoji.name) {
                     case "⬅":
@@ -189,7 +189,7 @@ class ListMessage {
                         this._message.edit(await this.onNext());
                         break;
                     default:
-                        if(this._onReact) this.onReact(this, reaction, true);
+                        if(this._onReact) this.onReact(this, reaction, user, true);
                         break;
                 }
             });

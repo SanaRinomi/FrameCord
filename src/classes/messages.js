@@ -40,6 +40,7 @@ class ReactionMessage {
             });
 
             this._collector.on("remove", async (reaction, user) => {
+                if(this.UserID && user.id !== this.UserID) return;
                 this.onReact(this, reaction, user, true);
             });
 
@@ -179,6 +180,7 @@ class ListMessage {
             });
 
             this._collector.on("remove", async reaction => {
+                if(this.UserID && user.id !== this.UserID) return;
                 switch(reaction.emoji.name) {
                     case "⬅":
                         this._message.edit(await this.onPrevious());
@@ -194,7 +196,7 @@ class ListMessage {
 
             this._collector.on("end", async (col, reason) => {
                 if(reason !== "completed")
-                    this.onEnd ? this.onEnd(this, col, reason) : this._message.edit(this._message.content + "\n\n**This message has timed-out!**");
+                    this.onEnd ? this.onEnd(this, col, reason) : this._message.edit(this._message.content + "\n\n**This message has timed out!**");
             });
     }
 

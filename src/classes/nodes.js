@@ -1,4 +1,5 @@
 const {Command} = require("./command");
+const {Permissions: {FLAGS}} = require("discord.js");
 
 // Blank Node
 class Node {
@@ -276,8 +277,8 @@ class CommandNode extends DataNode {
                 return;
             }
 
-            if(msg.guild.member(client.discordCli.user).hasPermission(this.BotPermissions)) {
-                if(msg.member.hasPermission(this.UserPermissions)) {
+            if(msg.guild.members.cache.get(client.discordCli.user.id).permissions.has(this.BotPermissions) || msg.guild.members.cache.get(client.discordCli.user.id).permissions.has(FLAGS.ADMINISTRATOR)) {
+                if(msg.member.permissions.has(this.UserPermissions) || msg.member.permissions.has(FLAGS.ADMINISTRATOR)) {
                     if(!this.HasArgs || (command.Args.length === 0 && !this.ArgsRequired)){
                         this._call(client, command, msg);
                         return;

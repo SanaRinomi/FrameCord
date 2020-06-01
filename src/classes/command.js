@@ -141,7 +141,7 @@ class Command {
             arg.shift();
             
             if(!isNaN(arg[0])) {
-                args.push(new Argument(i, arg[0], "number"));
+                args.push(new Argument(i, Number(arg[0]), "number"));
             } else if(arg[2] !== undefined) {
                 switch(arg[1]) {
                     case ":":

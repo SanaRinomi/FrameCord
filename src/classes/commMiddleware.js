@@ -49,7 +49,7 @@ class MiddlewareHandler {
             if(Array.isArray(arg.type)) {
                 let bool = false;
                 let failed = [];
-                if(this.comm.Args[i] === undefined && arg.optional) {
+                if((this.comm.Args[i] === undefined || this.comm.Args[i].Type === "empty") && arg.optional) {
                     bool = true;
                 }
 
@@ -64,7 +64,7 @@ class MiddlewareHandler {
                     return false;
                 }
             } else {
-                if(arg.type !== "any"  && (this.comm.Args[i].Type !== arg.type && (this.comm.Args[i] !== undefined || !arg.optional))){
+                if(arg.type !== "any"  && (this.comm.Args[i].Type !== arg.type && ((this.comm.Args[i] !== undefined && this.comm.Args[i].Type !== "empty") || !arg.optional))){
                     this.err(`The argument \`${this.comm.Args[i].Value}\` needs to be of type \`${arg.type}\` not \`${this.comm.Args[i].Type}\``);
                     return;
                 }

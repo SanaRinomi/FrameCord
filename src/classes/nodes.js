@@ -1,4 +1,5 @@
 const {Command} = require("./command");
+const MiddlewareHandler = require("./commMiddleware");
 
 // Blank Node
 class Node {
@@ -198,8 +199,14 @@ class CommandNode extends DataNode {
             bot: []
         };
 
+        this.middleware = [];
+
         if(Array.isArray(data.args)) this.setArgs(data.args);
         this.setPermissions(data.perms);
+    }
+
+    use(func) {
+        this.middleware.push(func);
     }
 
     setPermissions(arr) {
@@ -276,57 +283,8 @@ class CommandNode extends DataNode {
                 return;
             }
 
-            if(msg.guild.member(client.discordCli.user).hasPermission(this.BotPermissions)) {
-                if(msg.member.hasPermission(this.UserPermissions)) {
-                    if(!this.HasArgs || (command.Args.length === 0 && !this.ArgsRequired)){
-                        this._call(client, command, msg);
-                        return;
-                    }
-
-                    for (let i = 0; i < this.Args.length; i++) {
-                        const arg = this.Args[i];
-                        if(command.Args[i] === undefined){
-                            if(!arg.optional){
-                                msg.reply(`You are missing the argument \`${arg.name}\`${arg.type !== "any" ? " of type `" + arg.type + "`" : ""}`);
-                                return;
-                            } else break;
-                        }
-
-                        if(Array.isArray(arg.type)) {
-                            let bool = false;
-                            let failed = [];
-                            if(command.Args[i] === undefined && arg.optional) {
-                                bool = true;
-                            }
-
-                            arg.type.forEach(v => {
-                                if(command.Args[i].Type === v) bool = true;
-                                else failed.push(v);
-                            });
-
-                            if(!bool) {
-                                msg.reply(`The argument \`${command.Args[i].Value}\` needs to be of type \`${failed.join("`, `")}\` not \`${command.Args[i].Type}\``);
-                                return;
-                            }
-                        } else {
-                            if(arg.type !== "any"  && (command.Args[i].Type !== arg.type && (command.Args[i] !== undefined || !arg.optional))){
-                                msg.reply(`The argument \`${command.Args[i].Value}\` needs to be of type \`${arg.type}\` not \`${command.Args[i].Type}\``);
-                                return;
-                            }
-                        }
-                    }
-
-                    this._call(client, command, msg);
-                    return;
-                    
-                }
-                else if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES"))
-                    msg.reply("Insufficient user permissions to execute this command!");
-                else client.emit("nodePermissionFail", this, command, msg);
-            }
-            else if(msg.guild.member(client.discordCli.user).hasPermission("SEND_MESSAGES"))
-                msg.reply("Insufficient bot permissions to execute this command!");
-            else client.emit("nodePermissionFail", this, command, msg);
+            let mdObj = new MiddlewareHandler(client, command, msg, this._call, this, this.Permissions.length ? true : false);
+            mdObj.next();
         }
         else this._call(client, command, msg);
     }

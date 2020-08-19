@@ -1,6 +1,6 @@
 {
   "name": "framecord",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A Discord bot framework made by Sana Rinomi.",
   "main": "index.js",
   "scripts": {

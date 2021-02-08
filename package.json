@@ -1,6 +1,6 @@
 {
   "name": "framecord",
-  "version": "1.2.4",
+  "version": "2.0.0",
   "description": "A Discord bot framework made by Sana Rinomi.",
   "main": "index.js",
   "scripts": {
@@ -32,12 +32,11 @@
     "discord.js": "^12.3.1",
     "erlpack": "github:discordapp/erlpack",
     "fs-extra": "^9.0.1",
-    "moment": "^2.27.0",
     "utf-8-validate": "^5.0.2",
     "zlib-sync": "^0.1.7"
   },
   "engineStrict": true,
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=12.4.0"
   }
 }

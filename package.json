@@ -4,7 +4,7 @@
   "description": "A Discord bot framework made by Sana Rinomi.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "docs": "jsdoc2md --plugin dmd-readable --files src/**/*.js > api.md"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,9 @@
   "homepage": "https://github.com/SanaRinomi/FrameCord#readme",
   "devDependencies": {
     "chai": "^4.2.0",
+    "dmd-readable": "^1.2.2",
     "eslint": "^6.8.0",
+    "jsdoc-to-markdown": "^6.0.1",
     "mocha": "^7.2.0",
     "nodemon": "^2.0.4"
   },

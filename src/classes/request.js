@@ -1,6 +1,15 @@
 const {Message, Guild, User, GuildMember, TextChannel, Role} = require("discord.js");
 const Client = require("../controllers/client");
 
+/**
+ * @namespace Requests.Errors
+ */
+
+/**
+ * @class
+ * @memberof Requests.Errors
+ * @extends {Error}
+ */
 class RequestError extends Error {
 
     /**
@@ -14,6 +23,11 @@ class RequestError extends Error {
     }
 }
 
+/**
+ * @class
+ * @memberof Requests.Errors
+ * @extends {RequestError}
+ */
 class ArgumentError extends RequestError {
 
     /**
@@ -27,11 +41,15 @@ class ArgumentError extends RequestError {
     }
 }
 
+/**
+ * @namespace Requests.Arguments
+ */
 
 /**
  * Interface for classes that represent an argument.
  * 
  * @interface
+ * @memberof Requests.Arguments
  */
 class Argument {
 
@@ -72,6 +90,11 @@ class Argument {
     }
 }
 
+/**
+ * @class
+ * @memberof Requests.Arguments
+ * @extends {Argument}
+ */
 class StringArgument extends Argument {
 
     /**
@@ -139,6 +162,11 @@ class StringArgument extends Argument {
     }
 }
 
+/**
+ * @class
+ * @memberof Requests.Arguments
+ * @extends {Argument}
+ */
 class EmoteArgument extends Argument {
 
     /**
@@ -180,6 +208,11 @@ class EmoteArgument extends Argument {
     }
 }
 
+/**
+ * @class
+ * @memberof Requests.Arguments
+ * @extends {Argument}
+ */
 class UserArgument extends Argument {
     /**
      * User Request Argument.
@@ -205,6 +238,11 @@ class UserArgument extends Argument {
     }
 }
 
+/**
+ * @class
+ * @memberof Requests.Arguments
+ * @extends {Argument}
+ */
 class ChannelArgument extends Argument {
     /**
      * Channel Request Argument.
@@ -223,6 +261,11 @@ class ChannelArgument extends Argument {
     }
 }
 
+/**
+ * @class
+ * @memberof Requests.Arguments
+ * @extends {Argument}
+ */
 class RoleArgument extends Argument {
     /**
      * Role Request Argument.
@@ -241,6 +284,10 @@ class RoleArgument extends Argument {
     }
 }
 
+/**
+ * @class
+ * @memberof Requests.Arguments
+ */
 class ArgumentManager {
 
     /**
@@ -545,12 +592,21 @@ class ArgumentManager {
     }
 }
 
+/**
+ * @namespace Requests
+ */
+
+/**
+ * @class
+ * @memberof Requests
+ */
 class Request {
 
     /**
      * User request.
      * @param {Client} [client]
      * @param {Message} [message]
+     * @memberof {Requests}
      */
     constructor(client, message) {
 

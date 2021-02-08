@@ -307,8 +307,8 @@ class ArgumentManager {
      * @property {boolean} [interpretEmptyStrings=true] - Interpret concat characters with nothing between them as empty.
      * @property {boolean} [restArgs=false] - Interpret left over args using the last rule in rules.
      * @property {boolean} [stringConcat=true] - Whether or not to concatenate strings using stringConcatArr.
-     * @property {string} [splitCharacter=";"] - Character used by splitAtCharacter.
-     * @property {string[]} [stringConcatArr=["\"", "'", "`", "``", "```"]] - Joins strings between these characters. ", ', `, `` and ``` by default.
+     * @property {string} [splitCharacter=;] - Character used by splitAtCharacter.
+     * @property {string[]} [stringConcatArr=['"', "'", "`", "``", "```"]] - Joins strings between these characters.
      * @property {ArgRule[]} [rules] - Rules on what and where args should be in a message. Optional Args are moved to the end.
      */
 
@@ -632,8 +632,8 @@ class Request {
 
 module.exports = {
     Request,
-    ArgumentManager,
     Arguments: {
+        ArgumentManager,
         Argument,
         StringArgument,
         EmoteArgument,

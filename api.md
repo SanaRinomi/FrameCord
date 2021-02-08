@@ -621,7 +621,7 @@
 | [interpretEmptyStrings] | <code>boolean</code> | <code>true</code> | Interpret concat characters with nothing between them as empty. |
 | [restArgs] | <code>boolean</code> | <code>false</code> | Interpret left over args using the last rule in rules. |
 | [stringConcat] | <code>boolean</code> | <code>true</code> | Whether or not to concatenate strings using stringConcatArr. |
-| [splitCharacter] | <code>string</code> | <code>&quot;\&quot;;\&quot;&quot;</code> | Character used by splitAtCharacter. |
-| [stringConcatArr] | <code>Array.&lt;string&gt;</code> | <code>[&quot;\&quot;&quot;, &quot;&#x27;&quot;, &quot;&#x60;&quot;, &quot;&#x60;&#x60;&quot;, &quot;&#x60;&#x60;&#x60;&quot;]</code> | Joins strings between these characters. ", ', `, `` and ``` by default. |
+| [splitCharacter] | <code>string</code> | <code>&quot;;&quot;</code> | Character used by splitAtCharacter. |
+| [stringConcatArr] | <code>Array.&lt;string&gt;</code> | <code>[&#x27;&quot;&#x27;, &quot;&#x27;&quot;, &quot;&#x60;&quot;, &quot;&#x60;&#x60;&quot;, &quot;&#x60;&#x60;&#x60;&quot;]</code> | Joins strings between these characters. |
 | [rules] | [<code>Array.&lt;ArgRule&gt;</code>](#ArgRule) |  | Rules on what and where args should be in a message. Optional Args are moved to the end. |
 

@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const {Client: DiscordClient, ClientOptions, Message} = Discord;
-const Request = require("../classes/request");
+const Requests = require("../classes/request");
+const Nodes = require("../classes/nodes");
 
 class Client extends DiscordClient{
 

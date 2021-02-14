@@ -4,7 +4,9 @@
   "description": "A Discord bot framework made by Sana Rinomi.",
   "main": "index.js",
   "scripts": {
-    "docs": "jsdoc2md --plugin dmd-readable --files src/**/*.js > api.md"
+    "docs": "typedoc src",
+    "build": "tsc",
+    "start": "ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -22,12 +24,19 @@
   },
   "homepage": "https://github.com/SanaRinomi/FrameCord#readme",
   "devDependencies": {
+    "@types/node": "^14.14.25",
     "chai": "^4.2.0",
-    "dmd-readable": "^1.2.2",
+    "concat-md": "^0.3.5",
     "eslint": "^6.8.0",
-    "jsdoc-to-markdown": "^6.0.1",
     "mocha": "^7.2.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "ts-node": "^9.1.1",
+    "typedoc": "^0.20.23",
+    "typedoc-plugin-markdown": "^3.4.5",
+    "typedoc-plugin-no-inherit": "^1.2.0",
+    "typedoc-plugin-remove-references": "^0.0.5",
+    "typedoc-plugin-replace-in-comments": "^2.2.0",
+    "typescript": "^4.1.3"
   },
   "dependencies": {
     "bufferutil": "^4.0.1",

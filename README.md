@@ -8,5 +8,5 @@ A Discord bot framework made by Sana Rinomi.
 
 Install via NPM: `npm i -s framecord`
 
-## API
-Checkout the [API Here!](./api.md)
+## Documentation
+Checkout the [documentation here!](./docs/README.md)

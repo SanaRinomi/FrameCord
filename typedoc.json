@@ -1,0 +1,26 @@
+{
+    "readme": "none",
+    "out": "docs",
+    "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-remove-references", "typedoc-plugin-no-inherit", "typedoc-plugin-replace-in-comments"],
+    "replace-in-comments-config": [
+        {
+            "pattern": "(GH-(\\d+))",
+            "replace": "[$1](https://github.com/your-name/the-repo/issues/$2)"
+        },
+        {
+            "pattern": "discord\\.js(\\.|\\s)",
+            "flags": "gi",
+            "replace": "[Discord.JS](https://discord.js.org/)"
+        },
+        {
+            "pattern": "discord\\.js(/c/(\\w+))",
+            "flags": "gi",
+            "replace": "[Discord.JS (Class: $2)](https://discord.js.org/#/docs/main/stable/class/$2)"
+        },
+        {
+            "pattern": "discord\\.js(/t/(\\w+))",
+            "flags": "gi",
+            "replace": "[Discord.JS (Typedef: $2)](https://discord.js.org/#/docs/main/stable/typedef/$2)"
+        }
+    ]
+}

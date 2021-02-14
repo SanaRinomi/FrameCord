@@ -2,19 +2,19 @@ const {Message, Guild, User, GuildMember, TextChannel, Role} = require("discord.
 const Client = require("../controllers/client");
 
 /**
- * @namespace Requests.Errors
+ * @namespace CommandRequests.Errors
  */
 
 /**
  * @class
- * @memberof Requests.Errors
+ * @memberof CommandRequests.Errors
  * @extends {Error}
  */
 class RequestError extends Error {
 
     /**
      * Request error.
-     * @param {Request} request - Request where the error occured.
+     * @param {CommandRequest} request - Request where the error occured.
      * @param {?string} message - Error message.
      */
     constructor(request, message) {
@@ -25,7 +25,7 @@ class RequestError extends Error {
 
 /**
  * @class
- * @memberof Requests.Errors
+ * @memberof CommandRequests.Errors
  * @extends {RequestError}
  */
 class ArgumentError extends RequestError {
@@ -42,14 +42,14 @@ class ArgumentError extends RequestError {
 }
 
 /**
- * @namespace Requests.Arguments
+ * @namespace CommandRequests.Arguments
  */
 
 /**
  * Interface for classes that represent an argument.
  * 
  * @interface
- * @memberof Requests.Arguments
+ * @memberof CommandRequests.Arguments
  */
 class Argument {
 
@@ -92,7 +92,7 @@ class Argument {
 
 /**
  * @class
- * @memberof Requests.Arguments
+ * @memberof CommandRequests.Arguments
  * @extends {Argument}
  */
 class StringArgument extends Argument {
@@ -164,7 +164,7 @@ class StringArgument extends Argument {
 
 /**
  * @class
- * @memberof Requests.Arguments
+ * @memberof CommandRequests.Arguments
  * @extends {Argument}
  */
 class EmoteArgument extends Argument {
@@ -210,7 +210,7 @@ class EmoteArgument extends Argument {
 
 /**
  * @class
- * @memberof Requests.Arguments
+ * @memberof CommandRequests.Arguments
  * @extends {Argument}
  */
 class UserArgument extends Argument {
@@ -240,7 +240,7 @@ class UserArgument extends Argument {
 
 /**
  * @class
- * @memberof Requests.Arguments
+ * @memberof CommandRequests.Arguments
  * @extends {Argument}
  */
 class ChannelArgument extends Argument {
@@ -263,7 +263,7 @@ class ChannelArgument extends Argument {
 
 /**
  * @class
- * @memberof Requests.Arguments
+ * @memberof CommandRequests.Arguments
  * @extends {Argument}
  */
 class RoleArgument extends Argument {
@@ -286,7 +286,7 @@ class RoleArgument extends Argument {
 
 /**
  * @class
- * @memberof Requests.Arguments
+ * @memberof CommandRequests.Arguments
  */
 class ArgumentManager {
 
@@ -314,7 +314,7 @@ class ArgumentManager {
 
     /**
      * Request arguments.
-     * @param {Request} [request] - Request parent.
+     * @param {CommandRequest} [request] - Request parent.
      * @param {string} [argsString] - String with arguments.
      * @param {ArgsOptions} [options={}] - Options for argument processing.
      */
@@ -334,7 +334,7 @@ class ArgumentManager {
         };
 
         /**
-         * @type {Request}
+         * @type {CommandRequest}
          * @readonly
          */
         this.request = request;
@@ -593,20 +593,20 @@ class ArgumentManager {
 }
 
 /**
- * @namespace Requests
+ * @namespace CommandRequests
  */
 
 /**
  * @class
- * @memberof Requests
+ * @memberof CommandRequests
  */
-class Request {
+class CommandRequest {
 
     /**
      * User request.
-     * @param {Client} [client]
-     * @param {Message} [message]
-     * @memberof {Requests}
+     * @param {Client} client
+     * @param {Message} message
+     * @memberof {CommandRequests}
      */
     constructor(client, message) {
 
@@ -631,7 +631,7 @@ class Request {
 }
 
 module.exports = {
-    Request,
+    CommandRequest,
     Arguments: {
         ArgumentManager,
         Argument,
